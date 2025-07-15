@@ -7,13 +7,15 @@ import { Router } from "express";
 /**
  * Midelware
  */
-import { authenticateToken } from "@/middlewares/authenticateToken";
+import { authenticateToken } from "@/middlewares/jwt/authenticateToken";
+import { authorizeRoles } from "@/middlewares/jwt/authorizeRoles";
 
 /**
  *  Routes
  */
 
-import authRoutes from "@/routes/v1/authRoutes";
+import authRouter from "@/routes/v1/authRoutes";
+import userRouter from "@/routes/v1/userRoutes";
 
 
 const rootRouter = Router();
@@ -32,8 +34,8 @@ const asyncHandler = (fn: any) => (req: any, res: any, next: any) => {
     Promise.resolve(fn(req, res, next)).catch(next);
 };
 
- //app.use(asyncHandler(authenticateToken));
 
-rootRouter.use('/auth', authRoutes);
+rootRouter.use('/auth', authRouter);
+rootRouter.use('/user',asyncHandler(authenticateToken),asyncHandler( authorizeRoles('admin','user') ), userRouter);
 
 export default rootRouter;

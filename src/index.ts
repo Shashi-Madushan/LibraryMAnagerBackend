@@ -19,7 +19,7 @@ import  logger from '@/lib/winston';
 /** 
  *  Router 
  */
-import rootRoutes from '@/routes/v1/index';
+import rootRoutes from '@/routes/index';
 
 /**
  *  Types
