@@ -1,0 +1,38 @@
+/**
+ *  Node modules
+ */
+import { Router } from "express";
+// import cookieParser from "cookie-parser"; // Uncomment if you want to use cookie-parser middleware
+import { cookie } from "express-validator";
+
+/**
+ * Controllers
+ */
+import register from "@/controllers/v1/auth/register";
+import login from "@/controllers/v1/auth/login";
+import refreshToken from "@/controllers/v1/auth/refreshToken";
+
+/**
+ *  Middlewares
+ */
+import validationError from "@/middlewares/validationError";
+import { registerValidation, loginValidation, refreshTokenValidation } from "@/middlewares/authValidation";
+
+const authRouter = Router();
+
+authRouter.post('/register',
+    registerValidation,
+    validationError,
+    register
+);
+
+authRouter.post('/login',
+    loginValidation,
+    validationError,
+    login
+);
+authRouter.post('/refresh-token'
+    , refreshTokenValidation
+    , validationError
+    , refreshToken);
+export default authRouter;
