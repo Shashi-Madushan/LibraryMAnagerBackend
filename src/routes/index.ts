@@ -17,6 +17,7 @@ import { authorizeRoles } from "@/middlewares/jwt/authorizeRoles";
 import authRouter from "@/routes/v1/authRoutes";
 import userRouter from "@/routes/v1/userRoutes";
 import bookRouter from "@/routes/v1/bookRoutes";
+import lendingRouter from "@/routes/v1/lendingRoutes";
 
 
 const rootRouter = Router();
@@ -41,5 +42,6 @@ rootRouter.use('/auth', authRouter);
 rootRouter.use('/', asyncHandler(authenticateToken));
 rootRouter.use('/user', userRouter);
 rootRouter.use('/books', bookRouter);
+rootRouter.use('/lendings', lendingRouter);
 
 export default rootRouter;
