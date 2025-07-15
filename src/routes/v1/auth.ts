@@ -11,6 +11,7 @@ import { cookie } from "express-validator";
 import register from "@/controllers/v1/auth/register";
 import login from "@/controllers/v1/auth/login";
 import refreshToken from "@/controllers/v1/auth/refreshToken";
+import logout from "@/controllers/v1/auth/logout";
 
 /**
  *  Middlewares
@@ -35,4 +36,11 @@ authRouter.post('/refresh-token'
     , refreshTokenValidation
     , validationError
     , refreshToken);
+
+authRouter.post('/logout',
+    refreshTokenValidation,
+    validationError,
+    logout
+);
+
 export default authRouter;
