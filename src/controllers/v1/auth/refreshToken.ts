@@ -44,8 +44,8 @@ const refreshToken = async (req: Request, res: Response) => {
             return;
         }
         
-        const jwtPaylode = await verifyRefreshToken(refreshToken) as { userId: Types.ObjectId };
-        const accessToken = await generateAccessToken(jwtPaylode.userId);
+        const jwtPaylode = await verifyRefreshToken(refreshToken) as { userId: Types.ObjectId, role: string };
+        const accessToken = await generateAccessToken(jwtPaylode.userId, jwtPaylode.role);
         res.status(200).json({
            accessToken
         });

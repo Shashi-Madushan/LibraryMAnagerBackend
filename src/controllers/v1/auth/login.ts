@@ -57,8 +57,8 @@ const login = async (req: Request,res :Response) :Promise<void>=>{
         // }
 
         // generate a JWT accses token and refresh token for the new user
-        const accessToken = generateAccessToken(user._id);
-        const refreshToken = generateRefreshToken(user._id);
+        const accessToken = generateAccessToken(user._id, user.role);
+        const refreshToken = generateRefreshToken(user._id, user.role);
 
         // store refresh token in data base 
 
