@@ -4,22 +4,20 @@
 
 import { Router } from "express";
 
-
 /**
- *  Root router for the application
+ * Midelware
  */
-
-const rootRouter = Router();
+import { authenticateToken } from "@/middlewares/authenticateToken";
 
 /**
  *  Routes
  */
 
-import authRoutes from "@/routes/v1/auth";
+import authRoutes from "@/routes/v1/authRoutes";
 
-/**
- * root route handler
- */
+
+const rootRouter = Router();
+
 rootRouter.get('/', (req, res) => {
     res.status(200).json({
         message: " API is running successfully",
@@ -29,6 +27,12 @@ rootRouter.get('/', (req, res) => {
     })
 })
 
+// Helper to wrap async middleware for Express error handling
+const asyncHandler = (fn: any) => (req: any, res: any, next: any) => {
+    Promise.resolve(fn(req, res, next)).catch(next);
+};
+
+ //app.use(asyncHandler(authenticateToken));
 
 rootRouter.use('/auth', authRoutes);
 
