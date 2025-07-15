@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import { updateUserValidation, changePasswordValidation } from '@/middlewares/validations/userValidation';
 import validationError from '@/middlewares/validationError';
+import { authorizeRoles } from '@/middlewares/jwt/authorizeRoles';
 
 /**
  * controllers
@@ -20,6 +21,13 @@ userRouter.get('/me', getUserInfo);
 userRouter.patch('/update', updateUserValidation, validationError, updateUserInfo);
 userRouter.post('/change-password', changePasswordValidation, validationError, changePassword);
 userRouter.delete('/delete', deleteAccount);
+
+const asyncHandler = (fn: any) => (req: any, res: any, next: any) => {
+    Promise.resolve(fn(req, res, next)).catch(next);
+};
+
+// Protected routes (admin only)
+userRouter.use('/',asyncHandler(authorizeRoles('admin')) );
 userRouter.patch('/activate/:userId', activateUser);
 userRouter.patch('/deactivate/:userId', deactivateUser);
 userRouter.get('/all', getAllUsers);

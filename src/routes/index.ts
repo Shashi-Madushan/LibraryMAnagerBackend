@@ -16,6 +16,7 @@ import { authorizeRoles } from "@/middlewares/jwt/authorizeRoles";
 
 import authRouter from "@/routes/v1/authRoutes";
 import userRouter from "@/routes/v1/userRoutes";
+import bookRouter from "@/routes/v1/bookRoutes";
 
 
 const rootRouter = Router();
@@ -36,6 +37,9 @@ const asyncHandler = (fn: any) => (req: any, res: any, next: any) => {
 
 
 rootRouter.use('/auth', authRouter);
-rootRouter.use('/user',asyncHandler(authenticateToken),asyncHandler( authorizeRoles('admin','user') ), userRouter);
+
+rootRouter.use('/', asyncHandler(authenticateToken));
+rootRouter.use('/user', userRouter);
+rootRouter.use('/books', bookRouter);
 
 export default rootRouter;
