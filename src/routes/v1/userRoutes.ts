@@ -1,7 +1,6 @@
 import { Router } from 'express';
 
 import { updateUserValidation, changePasswordValidation } from '@/middlewares/validations/userValidation';
-
 import validationError from '@/middlewares/validationError';
 
 /**
@@ -13,6 +12,7 @@ import { changePassword } from '@/controllers/v1/user/changePassword';
 import { deleteAccount } from '@/controllers/v1/user/deleteAccount';
 import { activateUser } from '@/controllers/v1/user/activateUser';
 import { deactivateUser } from '@/controllers/v1/user/deactivateUser';
+import { getAllUsers } from '@/controllers/v1/user/getAllUsers';
 
 const userRouter = Router();
 
@@ -22,5 +22,6 @@ userRouter.post('/change-password', changePasswordValidation, validationError, c
 userRouter.delete('/delete', deleteAccount);
 userRouter.patch('/activate/:userId', activateUser);
 userRouter.patch('/deactivate/:userId', deactivateUser);
+userRouter.get('/all', getAllUsers);
 
 export default userRouter;
