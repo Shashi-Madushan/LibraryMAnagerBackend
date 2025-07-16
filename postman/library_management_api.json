@@ -1,0 +1,380 @@
+{
+	"info": {
+		"_postman_id": "unique-id",
+		"name": "Library Management API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"url": "{{baseUrl}}/api/v1/auth/register",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"password123\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"role\": \"user\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					}
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"url": "{{baseUrl}}/api/v1/auth/login",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					}
+				},
+				{
+					"name": "Refresh Token",
+					"request": {
+						"method": "POST",
+						"url": "{{baseUrl}}/api/v1/auth/refresh-token"
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"url": "{{baseUrl}}/api/v1/auth/logout"
+					}
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get User Info",
+					"request": {
+						"method": "GET",
+						"url": "{{baseUrl}}/api/v1/user/me",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						]
+					}
+				},
+				{
+					"name": "Update User Info",
+					"request": {
+						"method": "PATCH",
+						"url": "{{baseUrl}}/api/v1/user/update",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Name\",\n    \"email\": \"updated@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					}
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "POST",
+						"url": "{{baseUrl}}/api/v1/user/change-password",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"currentPassword\": \"password123\",\n    \"newPassword\": \"newpassword123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					}
+				},
+				{
+					"name": "Delete Account",
+					"request": {
+						"method": "DELETE",
+						"url": "{{baseUrl}}/api/v1/user/delete",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						]
+					}
+				},
+				{
+					"name": "Get All Users (Admin)",
+					"request": {
+						"method": "GET",
+						"url": "{{baseUrl}}/api/v1/user/all",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Books",
+			"item": [
+				{
+					"name": "Add Book",
+					"request": {
+						"method": "POST",
+						"url": "{{baseUrl}}/api/v1/books",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"The Great Gatsby\",\n    \"author\": \"F. Scott Fitzgerald\",\n    \"isbn\": \"978-0743273565\",\n    \"category\": \"Fiction\",\n    \"totalCopies\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					}
+				},
+				{
+					"name": "Get All Books",
+					"request": {
+						"method": "GET",
+						"url": "{{baseUrl}}/api/v1/books"
+					}
+				},
+				{
+					"name": "Get Book by ID",
+					"request": {
+						"method": "GET",
+						"url": "{{baseUrl}}/api/v1/books/{{bookId}}"
+					}
+				},
+				{
+					"name": "Get Books by Category",
+					"request": {
+						"method": "GET",
+						"url": "{{baseUrl}}/api/v1/books/category/Fiction"
+					}
+				},
+				{
+					"name": "Update Book",
+					"request": {
+						"method": "PUT",
+						"url": "{{baseUrl}}/api/v1/books/{{bookId}}",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Updated Title\",\n    \"totalCopies\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					}
+				},
+				{
+					"name": "Delete Book",
+					"request": {
+						"method": "DELETE",
+						"url": "{{baseUrl}}/api/v1/books/{{bookId}}",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Lendings",
+			"item": [
+				{
+					"name": "Lend Book",
+					"request": {
+						"method": "POST",
+						"url": "{{baseUrl}}/api/v1/lendings/lend",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{librarianToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": \"{{userId}}\",\n    \"bookId\": \"{{bookId}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					}
+				},
+				{
+					"name": "Return Book",
+					"request": {
+						"method": "PUT",
+						"url": "{{baseUrl}}/api/v1/lendings/return/{{lendingId}}",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{librarianToken}}"
+							}
+						]
+					}
+				},
+				{
+					"name": "Get All Lendings",
+					"request": {
+						"method": "GET",
+						"url": "{{baseUrl}}/api/v1/lendings",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{librarianToken}}"
+							}
+						]
+					}
+				},
+				{
+					"name": "Get User Lending History",
+					"request": {
+						"method": "GET",
+						"url": "{{baseUrl}}/api/v1/lendings/user/{{userId}}",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						]
+					}
+				},
+				{
+					"name": "Get Book Lending History",
+					"request": {
+						"method": "GET",
+						"url": "{{baseUrl}}/api/v1/lendings/book/{{bookId}}",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{librarianToken}}"
+							}
+						]
+					}
+				},
+				{
+					"name": "Get Overdue Lendings",
+					"request": {
+						"method": "GET",
+						"url": "{{baseUrl}}/api/v1/lendings/overdue",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{librarianToken}}"
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Email",
+			"item": [
+				{
+					"name": "Send Reminder Email",
+					"request": {
+						"method": "POST",
+						"url": "{{baseUrl}}/api/v1/email/send-reminder",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": \"{{userId}}\",\n    \"books\": [\n        {\n            \"title\": \"The Great Gatsby\",\n            \"dueDate\": \"2024-02-01T00:00:00.000Z\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000"
+		},
+		{
+			"key": "accessToken",
+			"value": "your_access_token_here"
+		},
+		{
+			"key": "adminToken",
+			"value": "your_admin_token_here"
+		},
+		{
+			"key": "librarianToken",
+			"value": "your_librarian_token_here"
+		},
+		{
+			"key": "userId",
+			"value": "user_id_here"
+		},
+		{
+			"key": "bookId",
+			"value": "book_id_here"
+		},
+		{
+			"key": "lendingId",
+			"value": "lending_id_here"
+		}
+	]
+}

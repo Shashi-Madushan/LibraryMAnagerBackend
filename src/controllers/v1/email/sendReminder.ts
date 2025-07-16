@@ -22,7 +22,8 @@ export const sendReminderEmail = async (req: Request, res: Response) => {
         const user = await User.findById(userId);
         if (!user) {
             logger.warn('User not found for reminder email', { userId });
-            return res.status(404).json({ message: 'User not found' });
+             res.status(404).json({ message: 'User not found' });
+             return;
         }
 
         // Generate and send email
@@ -39,13 +40,15 @@ export const sendReminderEmail = async (req: Request, res: Response) => {
                 email: user.email,
                 bookCount: books.length
             });
-            return res.status(200).json({ message: 'Reminder email sent successfully' });
+             res.status(200).json({ message: 'Reminder email sent successfully' });
+             return;
         } else {
             logger.error('Failed to send reminder email', { 
                 userId,
                 email: user.email
             });
-            return res.status(500).json({ message: 'Failed to send reminder email' });
+             res.status(500).json({ message: 'Failed to send reminder email' });
+             return;
         }
     } catch (error) {
         logger.error('Error in sendReminderEmail', {
@@ -53,6 +56,7 @@ export const sendReminderEmail = async (req: Request, res: Response) => {
             userId: req.body.userId,
             stack: error instanceof Error ? error.stack : undefined
         });
-        return res.status(500).json({ message: 'Internal server error' });
+         res.status(500).json({ message: 'Internal server error' });
+         return;
     }
 };
