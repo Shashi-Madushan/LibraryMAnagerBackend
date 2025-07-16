@@ -21,7 +21,9 @@ const config ={
     WHITELIST_ADMIN_MAILS:[
         'shashisulakshan8088@gmail.com',
         'testadmin@gmail.com'
-    ]
+    ],
+    EMAIL_USER: process.env.EMAIL_USER,
+    EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
 }
 
 export default config;

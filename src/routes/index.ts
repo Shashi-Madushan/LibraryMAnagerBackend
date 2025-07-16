@@ -18,6 +18,7 @@ import authRouter from "@/routes/v1/authRoutes";
 import userRouter from "@/routes/v1/userRoutes";
 import bookRouter from "@/routes/v1/bookRoutes";
 import lendingRouter from "@/routes/v1/lendingRoutes";
+import emailRouter from "@/routes/v1/emailRoutes";
 
 
 const rootRouter = Router();
@@ -43,5 +44,6 @@ rootRouter.use('/', asyncHandler(authenticateToken));
 rootRouter.use('/user', userRouter);
 rootRouter.use('/books', bookRouter);
 rootRouter.use('/lendings', lendingRouter);
+rootRouter.use('/email', emailRouter);
 
 export default rootRouter;
