@@ -14,6 +14,7 @@ import config from '@/config/index';
 import limiter from '@/lib/expressRateLimit';
 import { connectToDatabase, disconnectFromDatabase } from '@/db/mongoose';
 import  logger from '@/lib/winston';
+import path from 'path';
 
 
 /** 
@@ -70,6 +71,8 @@ app.use(helmet());
 // Apply rate limiting middleware
 app.use(limiter);
 
+// Serve static files
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
 
 

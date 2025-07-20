@@ -3,6 +3,9 @@ import { Book } from '@/models/Book';
 import { AuditLog } from '@/models/AuditLog';
 import { Types } from 'mongoose';
 import logger from '@/lib/winston';
+import config from '@/config';
+import fs from 'fs';
+import path from 'path';
 
 export const updateBook = async (req: Request, res: Response) => {
     try {
@@ -18,9 +21,39 @@ export const updateBook = async (req: Request, res: Response) => {
             return;
         }
 
+        // Get the existing book to handle image deletion if needed
+        const existingBook = await Book.findById(bookId);
+        
+        if (!existingBook) {
+            logger.warn('Book not found for update:', { bookId });
+            res.status(404).json({ 
+                success: false, 
+                message: 'Book not found' 
+            });
+            return;
+        }
+
+        const updateData = req.body;
+        
+        // Handle image update
+        if (req.file) {
+            // Delete old image if it exists
+            if (existingBook.imageUrl) {
+                const oldImagePath = existingBook.imageUrl.replace(`${config.APP_URL}/uploads/books/`, '');
+                const fullPath = path.join(__dirname, '../../../../public/uploads/books', oldImagePath);
+                
+                if (fs.existsSync(fullPath)) {
+                    fs.unlinkSync(fullPath);
+                }
+            }
+            
+            // Add new image URL
+            updateData.imageUrl = `${config.APP_URL}/uploads/books/${req.file.filename}`;
+        }
+
         const book = await Book.findByIdAndUpdate(
             bookId,
-            { $set: req.body },
+            { $set: updateData },
             { new: true, runValidators: true }
         );
 

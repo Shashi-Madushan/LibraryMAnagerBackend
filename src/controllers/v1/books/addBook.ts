@@ -2,10 +2,20 @@ import { Request, Response } from 'express';
 import { Book } from '@/models/Book';
 import { AuditLog } from '@/models/AuditLog';
 import logger from '@/lib/winston';
+import config from '@/config';
 
 export const addBook = async (req: Request, res: Response) => {
     try {
-        const book = new Book(req.body);
+        const bookData = req.body;
+        
+        // Add image URL if file was uploaded
+        if (req.file) {
+            // Generate public URL for the image
+            const imageUrl = `${config.APP_URL}/uploads/books/${req.file.filename}`;
+            bookData.imageUrl = imageUrl;
+        }
+
+        const book = new Book(bookData);
         await book.save();
 
         await new AuditLog({

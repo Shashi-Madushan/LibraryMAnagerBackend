@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { upload } from '@/middlewares/fileUpload';
 import { addBook } from '@/controllers/v1/books/addBook';
 import { getAllBooks } from '@/controllers/v1/books/getAllBooks';
 import { getBookById } from '@/controllers/v1/books/getBookById';
@@ -19,9 +20,11 @@ const asyncHandler = (fn: any) => (req: any, res: any, next: any) => {
 };
 
 // Protected routes (admin only)
-bookRouter.use('/',asyncHandler(authorizeRoles('admin')) );
-bookRouter.post('/', addBook);
-bookRouter.put('/:id', updateBook);
-bookRouter.delete('/:id', deleteBook);
+bookRouter.use(asyncHandler(authorizeRoles('admin')));
+
+// Admin routes with file upload
+bookRouter.post('/', upload.single('image'), asyncHandler(addBook));
+bookRouter.put('/:id', upload.single('image'), asyncHandler(updateBook));
+bookRouter.delete('/:id', asyncHandler(deleteBook));
 
 export default bookRouter;

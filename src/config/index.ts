@@ -9,6 +9,7 @@ import ms from 'ms';
 dotenv.config();
 
 const config ={
+    APP_URL: process.env.APP_URL || 'http://localhost:3000',
     PORT : process.env.PORT || 3000,
     NODE_ENV :process.env.NODE_ENV,
     WHITE_LIST_ORIGINS : ['http://localhost:3000', 'http://localhost:5173'],

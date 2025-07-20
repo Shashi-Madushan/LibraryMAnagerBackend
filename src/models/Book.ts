@@ -7,10 +7,15 @@ export interface IBook {
     category: string;
     available: boolean;
     totalCopies: number;
+    imageUrl?: string;
 }
 
 const bookSchema = new Schema<IBook>(
     {
+        imageUrl: {
+            type: String,
+            trim: true
+        },
         title: {
             type: String,
             required: [true, 'Title is required'],
