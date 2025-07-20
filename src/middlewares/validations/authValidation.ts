@@ -24,18 +24,18 @@ export const registerValidation = [
                 throw new Error('User already exists');
             }
         }),
-    body('username')
-        .trim()
-        .notEmpty()
-        .withMessage('Username is required')
-        .isLength({ max: 20 })
-        .withMessage('Username must be less than 20 characters')
-        .custom(async (value) => {
-            const userExists = await User.exists({ username: value });
-            if (userExists) {
-                throw new Error('Username already exists');
-            }
-        }),
+    // body('username')
+    //     .trim()
+    //     .notEmpty()
+    //     .withMessage('Username is required')
+    //     .isLength({ max: 20 })
+    //     .withMessage('Username must be less than 20 characters')
+    //     .custom(async (value) => {
+    //         const userExists = await User.exists({ username: value });
+    //         if (userExists) {
+    //             throw new Error('Username already exists');
+    //         }
+    //     }),
     body('password')
         .notEmpty()
         .withMessage('Password is required')
