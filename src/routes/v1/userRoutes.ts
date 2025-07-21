@@ -8,12 +8,13 @@ import { authorizeRoles } from '@/middlewares/jwt/authorizeRoles';
  * controllers
  */
 import { getUserInfo } from '@/controllers/v1/user/getUserInfo';
-import { updateUserInfo } from '@/controllers/v1/user/updateUserInfo';
+import { updateUserInfo , updateUserById} from '@/controllers/v1/user/updateUserInfo';
 import { changePassword } from '@/controllers/v1/user/changePassword';
-import { deleteAccount } from '@/controllers/v1/user/deleteAccount';
+import { deleteAccount ,deleteUserById } from '@/controllers/v1/user/deleteAccount';
 import { activateUser } from '@/controllers/v1/user/activateUser';
 import { deactivateUser } from '@/controllers/v1/user/deactivateUser';
 import { getAllUsers } from '@/controllers/v1/user/getAllUsers';
+import addUser from '@/controllers/v1/user/addUser';
 
 const userRouter = Router();
 
@@ -28,8 +29,11 @@ const asyncHandler = (fn: any) => (req: any, res: any, next: any) => {
 
 // Protected routes (admin only)
 userRouter.use('/',asyncHandler(authorizeRoles('admin')) );
+userRouter.post('/add', asyncHandler(addUser));
+userRouter.patch('/:userId', updateUserValidation, validationError, updateUserById);
 userRouter.patch('/activate/:userId', activateUser);
 userRouter.patch('/deactivate/:userId', deactivateUser);
 userRouter.get('/all', getAllUsers);
+userRouter.delete('/:userId', deleteUserById);
 
 export default userRouter;

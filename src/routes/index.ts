@@ -40,10 +40,9 @@ const asyncHandler = (fn: any) => (req: any, res: any, next: any) => {
 
 rootRouter.use('/auth', authRouter);
 
-rootRouter.use('/', asyncHandler(authenticateToken));
-rootRouter.use('/user', userRouter);
-rootRouter.use('/books', bookRouter);
-rootRouter.use('/lendings', lendingRouter);
-rootRouter.use('/email', emailRouter);
+rootRouter.use('/user', asyncHandler(authenticateToken), userRouter);
+rootRouter.use('/books', asyncHandler(authenticateToken), bookRouter);
+rootRouter.use('/lendings', asyncHandler(authenticateToken), lendingRouter);
+rootRouter.use('/email', asyncHandler(authenticateToken), emailRouter);
 
 export default rootRouter;

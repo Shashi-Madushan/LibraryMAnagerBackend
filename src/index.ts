@@ -36,16 +36,16 @@ const app = express();
 
 const corsOptions: CorsOptions = {
     origin(origin, callback) {
+        // console.log('Request origin:', origin); // Add this line
         if (config.NODE_ENV === 'development' || !origin || config.WHITE_LIST_ORIGINS.includes(origin)) {
             callback(null, true)
         } else {
             callback(new Error(`CORS Error : ${origin} is not allowd by CORS`), false)
             logger.warn(`CORS Error : ${origin} is not allowd by CORS`)
-
         }
     },
+    credentials: true
 }
-
 
 
 // Apply cors middleware

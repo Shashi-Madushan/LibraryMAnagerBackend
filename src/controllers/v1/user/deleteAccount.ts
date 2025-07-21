@@ -33,3 +33,31 @@ export const deleteAccount = async (req: Request, res: Response) => {
         });
     }
 };
+
+export const deleteUserById = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params;
+        const user = await User.findById(userId);
+        
+        if (!user) {
+             res.status(404).json({
+                code: 'NotFound',
+                message: 'User not found'
+            });
+            return;
+        }
+
+        await Token.deleteMany({ userId });
+        await User.findByIdAndDelete(userId);
+
+        res.status(200).json({
+            message: 'User deleted successfully'
+        });
+    } catch (error) {
+        logger.error('Error deleting user:', error);
+        res.status(500).json({
+            code: 'InternalServerError',
+            message: 'Error deleting user'
+        });
+    }
+};
