@@ -24,10 +24,11 @@ export const authenticateToken = async (
     const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
 
     if (!token) {
-        return res.status(401).json({
+        res.status(401).json({
             code: 'AuthenticationError',
             message: 'Access token is required'
         });
+        return;
     }
 
     try {
@@ -36,22 +37,25 @@ export const authenticateToken = async (
         next();
     } catch (error) {
         if (error instanceof TokenExpiredError) {
-            return res.status(401).json({
+             res.status(401).json({
                 code: 'AuthenticationError',
                 message: 'Access token has expired'
             });
+            return;
         }
         if (error instanceof JsonWebTokenError) {
-            return res.status(401).json({
+             res.status(401).json({
                 code: 'AuthenticationError',
                 message: 'Invalid access token'
             });
+            return;
         }
         logger.error('Authentication error:', error);
-        return res.status(500).json({
+         res.status(500).json({
             code: 'InternalServerError',
             message: 'Internal server error'
         });
+        return;
     }
 };
 
