@@ -1,14 +1,19 @@
 import logger from '@/lib/winston';
 import { generateRandomUsername } from '@/utils';
 import { User } from '@/models/User';
+import { AuditLog } from '@/models/AuditLog';
 import config from '@/config';
 import type { IUser } from '@/models/User';
 import { Request, Response } from 'express';
+import { Types } from 'mongoose';
 
 type UserData = Pick<IUser, 'email' | 'password' | 'role' | 'firstName' | 'lastName'>;
 
+type newuser = IUser & {
+    _id: Types.ObjectId;
+}
 // Create user function
-const createUser = async (userData: UserData): Promise<IUser> => {
+const createUser = async (userData: UserData): Promise<newuser> => {
     const { email, password, role, firstName, lastName } = userData;
 
     // Check if attempting admin registration
@@ -42,6 +47,15 @@ const addUser = async (req: Request, res: Response) => {
     try {
         const userData: UserData = req.body;
         const newUser = await createUser(userData);
+        
+        // Create audit log
+        await AuditLog.create({
+            action: 'CREATE_USER',
+            performedBy: req.user?.userId,
+            targetId: newUser._id,
+            targetType: 'User',
+            details: `Created user ${newUser.username} with role ${newUser.role}`
+        });
         
         res.status(201).json({
             success: true,

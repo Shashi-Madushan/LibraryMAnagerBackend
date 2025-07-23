@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { User } from '@/models/User';
+import { AuditLog } from '@/models/AuditLog';
 import logger from '@/lib/winston';
 
 export const deactivateUser = async (req: Request, res: Response): Promise<void> => {
@@ -19,6 +20,15 @@ export const deactivateUser = async (req: Request, res: Response): Promise<void>
       });
       return;
     }
+
+    // Create audit log
+    await AuditLog.create({
+      action: 'UPDATE_USER',
+      performedBy: req.user?.userId,
+      targetId: user._id,
+      targetType: 'User',
+      details: `Deactivated user ${user.username}`
+    });
 
     res.status(200).json({
       message: 'User deactivated successfully',

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { User } from '@/models/User';
 import Token from '@/models/token';
+import { AuditLog } from '@/models/AuditLog';
 import logger from '@/lib/winston';
 
 export const deleteAccount = async (req: Request, res: Response) => {
@@ -12,8 +13,19 @@ export const deleteAccount = async (req: Request, res: Response) => {
                 message: 'User not found'
             });
         } else {
-            await Token.deleteMany({ userId: req.user?.userId });
-            await User.findByIdAndDelete(req.user?.userId);
+            const userId = req.user?.userId;
+            await Token.deleteMany({ userId });
+            
+            // Create audit log before deleting the user
+            await AuditLog.create({
+                action: 'DELETE_USER',
+                performedBy: userId,
+                targetId: user._id,
+                targetType: 'User',
+                details: `User ${user.username} deleted their account`
+            });
+
+            await User.findByIdAndDelete(userId);
 
             res.clearCookie('refreshToken', {
                 httpOnly: true,
@@ -48,6 +60,16 @@ export const deleteUserById = async (req: Request, res: Response) => {
         }
 
         await Token.deleteMany({ userId });
+        
+        // Create audit log before deleting the user
+        await AuditLog.create({
+            action: 'DELETE_USER',
+            performedBy: req.user?.userId,
+            targetId: user._id,
+            targetType: 'User',
+            details: `Admin deleted user ${user.username}`
+        });
+
         await User.findByIdAndDelete(userId);
 
         res.status(200).json({
