@@ -7,6 +7,7 @@ import { getBooksByCategory } from '@/controllers/v1/books/getBooksByCategory';
 import { updateBook } from '@/controllers/v1/books/updateBook';
 import { deleteBook } from '@/controllers/v1/books/deleteBook';
 import { authorizeRoles } from '@/middlewares/jwt/authorizeRoles';
+import { getBooksByName } from '@/controllers/v1/books/getBookByName';
 
 const bookRouter = Router();
 
@@ -14,6 +15,7 @@ const bookRouter = Router();
 bookRouter.get('/', getAllBooks);
 bookRouter.get('/category/:category', getBooksByCategory);
 bookRouter.get('/:id', getBookById);
+bookRouter.get('/name/:name', getBooksByName);
 
 const asyncHandler = (fn: any) => (req: any, res: any, next: any) => {
     Promise.resolve(fn(req, res, next)).catch(next);

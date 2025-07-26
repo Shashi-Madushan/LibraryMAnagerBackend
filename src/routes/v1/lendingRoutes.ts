@@ -19,7 +19,7 @@ router.use(authenticateToken as any);
 router.get('/user/:userId', getUserLendingHistory);
 
 // Protected routes (librarian only)
-router.use(authorizeRoles('librarian') as any);
+router.use(authorizeRoles('admin') as any);
 router.post('/lend', lendBook);
 router.put('/return/:lendingId', returnBook);
 router.get('/', getLendings);

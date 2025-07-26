@@ -3,13 +3,13 @@ import { Lending } from '@/models/Lending';
 import { Book } from '@/models/Book';
 import logger from '@/lib/winston';
 
-const LENDING_PERIOD_DAYS = 14;
+
 
 export const lendBook = async (req: Request, res: Response) => {
   logger.info('Attempting to lend book', { userId: req.body.userId, bookId: req.body.bookId });
 
-  const { userId, bookId } = req.body;
-
+  const { userId, bookId ,lendigTime} = req.body;
+  const LENDING_PERIOD_DAYS = lendigTime || 14; // Default to 14 days if not specified
   try {
     const book = await Book.findById(bookId);
     if (!book) {

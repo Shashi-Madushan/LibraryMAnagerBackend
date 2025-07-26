@@ -7,7 +7,7 @@ import { authorizeRoles } from '@/middlewares/jwt/authorizeRoles';
 /**
  * controllers
  */
-import { getUserInfo } from '@/controllers/v1/user/getUserInfo';
+import { getUserInfo ,getUserInfoByEmail } from '@/controllers/v1/user/getUserInfo';
 import { updateUserInfo , updateUserById} from '@/controllers/v1/user/updateUserInfo';
 import { changePassword } from '@/controllers/v1/user/changePassword';
 import { deleteAccount ,deleteUserById } from '@/controllers/v1/user/deleteAccount';
@@ -34,6 +34,7 @@ userRouter.patch('/:userId', updateUserValidation, validationError, updateUserBy
 userRouter.patch('/activate/:userId', activateUser);
 userRouter.patch('/deactivate/:userId', deactivateUser);
 userRouter.get('/all', getAllUsers);
+userRouter.get('/:email', getUserInfoByEmail);
 userRouter.delete('/:userId', deleteUserById);
 
 export default userRouter;

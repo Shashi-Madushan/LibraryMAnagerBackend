@@ -21,3 +21,24 @@ export const getUserInfo = async (req: Request, res: Response) => {
         });
     }
 };
+
+export const getUserInfoByEmail = async (req: Request, res: Response) => {
+    const { email } = req.params;
+    try {
+        const user = await User.findOne({ email }).select('-password');
+        if (!user) {
+            res.status(404).json({
+                code: 'NotFound',
+                message: 'User not found'
+            });
+        } else {
+            res.status(200).json({ user });
+        }
+    } catch (error) {
+        logger.error('Error fetching user info by email:', error);
+        res.status(500).json({
+            code: 'InternalServerError',
+            message: 'Error fetching user information by email'
+        });
+    }
+};
