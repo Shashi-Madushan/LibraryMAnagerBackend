@@ -16,7 +16,7 @@ import logout from "@/controllers/v1/auth/logout";
 /**
  *  Middlewares
  */
-import validationError from "@/middlewares/validationError";
+import validationError from "@/errors/validationError";
 import { registerValidation, loginValidation, refreshTokenValidation } from "@/middlewares/validations/authValidation";
 
 const authRouter = Router();

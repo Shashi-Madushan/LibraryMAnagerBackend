@@ -1,19 +1,33 @@
 import { Request, Response } from 'express';
 import { Lending } from '@/models/Lending';
+import { User } from '@/models/User'; // import User model
 import logger from '@/lib/winston';
 
 export const getUserLendingHistory = async (req: Request, res: Response) => {
-  const { userId } = req.params;
-  
-  logger.info('Fetching user lending history', { userId });
+  const { email } = req.params;
+  console.log('Fetching lending history for user:', email);
 
   try {
-    const lendings = await Lending.find({ userId })
+    // Find user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      logger.warn('User not found for lending history', { email });
+       res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+      return;
+    }
+
+    logger.info('Fetching user lending history', { userId: user._id });
+
+    // Find lendings by userId
+    const lendings = await Lending.find({ userId: user._id })
       .populate('bookId', 'title author')
       .sort({ borrowedAt: -1 });
 
     logger.info('Successfully fetched user lending history', { 
-      userId,
+      userId: user._id,
       count: lendings.length
     });
 
@@ -26,7 +40,7 @@ export const getUserLendingHistory = async (req: Request, res: Response) => {
     const err = error as Error;
     logger.error('Failed to fetch user lending history', { 
       error: err.message,
-      userId
+      email
     });
     
     res.status(500).json({

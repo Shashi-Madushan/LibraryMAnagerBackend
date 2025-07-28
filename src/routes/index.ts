@@ -20,6 +20,7 @@ import bookRouter from "@/routes/v1/bookRoutes";
 import lendingRouter from "@/routes/v1/lendingRoutes";
 import auditRouter from "@/routes/v1/auditRoutes";
 import emailRouter from "@/routes/v1/emailRoutes";
+import dasbordRouter from "@/routes/v1/dashboardRoutes"
 
 
 const rootRouter = Router();
@@ -46,5 +47,6 @@ rootRouter.use('/books', asyncHandler(authenticateToken), bookRouter);
 rootRouter.use('/lendings', asyncHandler(authenticateToken), lendingRouter);
 rootRouter.use('/email', asyncHandler(authenticateToken), emailRouter);
 rootRouter.use('/audit', asyncHandler(authenticateToken), auditRouter);
+rootRouter.use('/dashbord',asyncHandler(authenticateToken),dasbordRouter)
 
 export default rootRouter;

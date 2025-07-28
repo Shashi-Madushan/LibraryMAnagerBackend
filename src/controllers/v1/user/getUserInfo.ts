@@ -32,7 +32,7 @@ export const getUserInfoByEmail = async (req: Request, res: Response) => {
                 message: 'User not found'
             });
         } else {
-            res.status(200).json({ user });
+            res.status(200).json( user );
         }
     } catch (error) {
         logger.error('Error fetching user info by email:', error);

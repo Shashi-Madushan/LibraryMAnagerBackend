@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Lending } from '@/models/Lending';
 import { Book } from '@/models/Book';
 import logger from '@/lib/winston';
+import { AuditLog } from '@/models/AuditLog';
 
 export const returnBook = async (req: Request, res: Response) => {
   const { lendingId } = req.params;
@@ -35,6 +36,16 @@ export const returnBook = async (req: Request, res: Response) => {
       { path: 'userId', select: 'name email' },
       { path: 'bookId', select: 'title author' }
     ]);
+
+    // Add audit log for return action
+    await AuditLog.create({
+      action: 'RETURN',
+      performedBy: req.user?.userId,
+      targetId: lending._id,
+      targetType: 'Lending',
+      details: `Book '${lending.bookId}' returned by user '${lending.userId}'`,
+      timestamp: new Date()
+    });
 
     logger.info('Book returned successfully', {
       lendingId,

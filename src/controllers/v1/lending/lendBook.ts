@@ -2,14 +2,16 @@ import { Request, Response } from 'express';
 import { Lending } from '@/models/Lending';
 import { Book } from '@/models/Book';
 import logger from '@/lib/winston';
+import { AuditLog } from '@/models/AuditLog';
 
 
 
 export const lendBook = async (req: Request, res: Response) => {
   logger.info('Attempting to lend book', { userId: req.body.userId, bookId: req.body.bookId });
 
-  const { userId, bookId ,lendigTime} = req.body;
-  const LENDING_PERIOD_DAYS = lendigTime || 14; // Default to 14 days if not specified
+  const { userId, bookId } = req.body;
+  const LENDING_PERIOD_DAYS = 14; // Fixed lending period of 14 days
+
   try {
     const book = await Book.findById(bookId);
     if (!book) {
@@ -25,10 +27,9 @@ export const lendBook = async (req: Request, res: Response) => {
       return;
     }
 
-    // Calculate due date
+    // Calculate due date correctly
     const borrowedAt = new Date();
-    const dueDate = new Date(borrowedAt);
-    dueDate.setDate(dueDate.getDate() + LENDING_PERIOD_DAYS);
+    const dueDate = new Date(borrowedAt.getTime() + LENDING_PERIOD_DAYS * 24 * 60 * 60 * 1000);
 
     // Create lending record
     const lending = await Lending.create({
@@ -48,6 +49,16 @@ export const lendBook = async (req: Request, res: Response) => {
       { path: 'userId', select: 'name email' },
       { path: 'bookId', select: 'title author' }
     ]);
+
+    // Add audit log for lending action
+    await AuditLog.create({
+      action: 'LEND',
+      performedBy: req.user?.userId,
+      targetId: lending._id,
+      targetType: 'Lending',
+      details: `Book '${book.title}' lent to user '${lending.userId}'`,
+      timestamp: new Date()
+    });
 
     logger.info('Book lent successfully', {
       lendingId: lending._id,

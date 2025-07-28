@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { updateUserValidation, changePasswordValidation } from '@/middlewares/validations/userValidation';
-import validationError from '@/middlewares/validationError';
+import validationError from '@/errors/validationError';
 import { authorizeRoles } from '@/middlewares/jwt/authorizeRoles';
 
 /**

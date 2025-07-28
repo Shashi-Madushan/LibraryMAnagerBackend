@@ -16,14 +16,14 @@ const router = Router();
 router.use(authenticateToken as any);
 
 // Public routes (for authenticated users)
-router.get('/user/:userId', getUserLendingHistory);
+router.get('/user/:email', getUserLendingHistory);
 
 // Protected routes (librarian only)
 router.use(authorizeRoles('admin') as any);
 router.post('/lend', lendBook);
 router.put('/return/:lendingId', returnBook);
 router.get('/', getLendings);
-router.get('/book/:bookId', getBookLendingHistory);
+router.get('/book/:name', getBookLendingHistory);
 router.get('/overdue', getOverdueLendings);
 
 export default router;
